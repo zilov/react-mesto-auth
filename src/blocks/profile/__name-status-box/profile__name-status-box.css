@@ -1,0 +1,19 @@
+.profile__name-status-box {
+  display: grid;
+  word-wrap: normal;
+  grid-template-columns: auto 18px;
+
+  grid-column-gap: 10px;
+  grid-row-gap: 7px;
+  margin-left: 25px;
+}
+
+
+@media screen and (min-width: 1024px) {
+  .profile__name-status-box {
+    grid-template-columns: auto 24px;
+    grid-column-gap: 18px;
+    grid-row-gap: 16px;
+    margin-left: 0;
+  }
+}

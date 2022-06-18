@@ -1,0 +1,7 @@
+.card__title-like-box {
+  display: flex;
+  width: calc(282px - 21px - 20px);
+  justify-content: space-between;
+  margin: 24px 21px 24px 21px;
+  align-items: center;
+}

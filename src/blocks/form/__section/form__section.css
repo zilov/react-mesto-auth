@@ -1,0 +1,8 @@
+.form__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__section:last-of-type {
+  margin-bottom: 0px;
+}

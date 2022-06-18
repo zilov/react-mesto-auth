@@ -1,0 +1,26 @@
+.page {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0 auto;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+
+@media screen and (min-width: 768px) {
+  .page {
+    min-width: 680px;
+  } 
+}
+
+
+@media screen and (min-width: 1024px) {
+  .page {
+    min-width: 880px;
+  } 
+}
