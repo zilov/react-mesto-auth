@@ -1,27 +1,27 @@
 import React from "react";
 
-function FormInput(props) {
-  const value = props.value || '';
+function FormInput({value, type, id, maxLength, placeholder, setValue}) {
+  const checkedValue = value || '';
 
   // обновляй значение стейта при изменении инпута (стейт в компоненте попапа)
   const handleInput = (e) => {
-    props.setValue(e.target.value);
+    setValue(e.target.value);
   }
 
   return(
     <section className="form__section">
       <input
-        type={props.type}
-        id={props.id}
+        type={type}
+        id={id}
         className="form__input"
         minLength="2"
-        maxLength={props.maxLength && "1000"}
-        value={value}
-        placeholder={props.placeholder}
+        maxLength={maxLength && "1000"}
+        value={checkedValue}
+        placeholder={placeholder}
         onChange={handleInput}
         required
       />
-      <span className="form__input-err" id={`${props.id}-Error`}></span>
+      <span className="form__input-err" id={`${id}-Error`}></span>
     </section>
   )
 }
