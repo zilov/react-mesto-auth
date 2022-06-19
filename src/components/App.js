@@ -3,10 +3,12 @@ import '../App.css';
 import api from "../utils/Api";
 import Header  from './Header';
 import Main from './Main';
+import Login from './Login';
+import Register from './Register';
 import Footer from './Footer';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState } from "react";
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -18,8 +20,6 @@ function App() {
   // register / login states and functions
 
   const [loggedIn, setLoggedIn] = useState(false);
-
-
 
   // main functionality states and functions
   const [currentUser, setCurrentUser] = useState({});
@@ -35,6 +35,7 @@ function App() {
     }).catch((err) => {console.log(`Error in getting initial user data ${err}`)})
 
     api.getCardsList().then((res) => {
+      console.log(res);
       setCards(res.map(item => item))
     }).catch((err) => {console.log(`Error in getting initial card list ${err}`)})
   }, []);
@@ -105,9 +106,10 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
       <div className='page'>
-        <Header logo={logo} loggedIn={loggedIn}/>     
+        <Header logo={logo}/> 
         <Switch>
           <ProtectedRoute
+            path='/'
             component={Main} 
             loggedIn={loggedIn}
             cards={cards}
@@ -124,13 +126,17 @@ function App() {
               addCard: isAddCardPopupOpen,
               cardPopup: selectedCard,
             }}
-            />
-            <Route path="/signup"></Route>
-            <Route path="/signin"></Route>
-        </Switch>
-        <Main
-          
-        />
+          />
+          <Route path="/signup">
+            <Register/>
+          </Route>
+          <Route path="/signin">
+            <Login/>
+          </Route>
+          <Route path='*'>
+            {loggedIn ? <Redirect to="/"/> : <Redirect to="/signin"/>}
+          </Route>
+        </Switch>    
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
         <AddPlacePopup isOpen={isAddCardPopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace}/>
