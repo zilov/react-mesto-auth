@@ -1,4 +1,4 @@
-const authUrl = 'https://auth.nomoreparties.co/'
+const authUrl = 'https://auth.nomoreparties.co'
 
 function checkResponse(res, job) {
   if (res.ok) {
@@ -14,8 +14,8 @@ export const register = (email, password) => {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email, password})
-    }.then((response) => {return checkResponse(response, job)})  
-  )
+    }
+  ).then((response) => {return checkResponse(response, job)})  
 }
 
 export const login = (email, password) => {
@@ -24,9 +24,9 @@ export const login = (email, password) => {
     `${authUrl}/signin`, {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({email, password})
-    }.then((response) => {return checkResponse(response, job)})  
-  )
+      body: JSON.stringify({email, password}),
+    }
+  ).then((response) => {return checkResponse(response, job)})
 }
 
 export const checkToken = (myJwt) => {
@@ -38,6 +38,6 @@ export const checkToken = (myJwt) => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${myJwt}`
       }
-    }.then((response) => {return checkResponse(response, job)})  
-  )
+    }
+  ).then((response) => {return checkResponse(response, job)})
 }

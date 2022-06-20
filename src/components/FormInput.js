@@ -1,8 +1,7 @@
 import React from "react";
 
 function FormInput({value, type, id, maxLength, placeholder, setValue}) {
-  const checkedValue = value || '';
-
+  
   // обновляй значение стейта при изменении инпута (стейт в компоненте попапа)
   const handleInput = (e) => {
     setValue(e.target.value);
@@ -15,8 +14,8 @@ function FormInput({value, type, id, maxLength, placeholder, setValue}) {
         id={id}
         className="form__input"
         minLength="2"
-        maxLength={maxLength && "1000"}
-        value={checkedValue}
+        maxLength={maxLength || "1000"}
+        value={value}
         placeholder={placeholder}
         onChange={handleInput}
         required

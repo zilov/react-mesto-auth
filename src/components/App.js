@@ -8,7 +8,7 @@ import Register from './Register';
 import Footer from './Footer';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState } from "react";
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -19,7 +19,17 @@ function App() {
 
   // register / login states and functions
 
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (loggedIn) {
+      history.push('/');
+    } else {
+      history.push('/signin');
+      localStorage.removeItem('jwt');
+    }
+  })
 
   // main functionality states and functions
   const [currentUser, setCurrentUser] = useState({});
@@ -109,7 +119,7 @@ function App() {
               <Register/>
             </Route>
             <Route path="/signin">
-              <Login/>
+              <Login setLoggedIn={setLoggedIn}/>
             </Route>
             <ProtectedRoute
                 path='/'
