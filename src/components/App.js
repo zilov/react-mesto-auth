@@ -15,12 +15,19 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import { checkToken } from '../utils/Auth';
+import PopupAuthInfo from './PopupAuthInfo';
+import iconLoginError from '../images/popup_auth-info-error.svg';
+import iconRegisterSuccess from '../images/popup_auth-info-success.svg';
 
 function App() {
 
   // register / login states and functions
 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isRegisterSuccessPopupOpen, setIsRegisterSuccessPopupOpen] = useState(false);
+  const [isLoginErrorPopupOpen, setIsLoginErrorPopupOpen] = useState(false);
+
+
   const history = useHistory();
 
   useEffect(() => {
@@ -31,7 +38,7 @@ function App() {
     if (loggedIn) {
       history.push('/');
     } else {
-      history.push('/signin');
+      history.push('/signup');
       localStorage.removeItem('jwt');
     }
   }, [loggedIn]);
@@ -77,6 +84,8 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddCardPopupOpen(false);
     setSelectedCard(null);
+    setIsRegisterSuccessPopupOpen(false);
+    setIsLoginErrorPopupOpen(false);
   }
 
   function handleUpdateUser(name, about) {
@@ -154,6 +163,8 @@ function App() {
           <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
           <AddPlacePopup isOpen={isAddCardPopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace}/>
+          <PopupAuthInfo isOpen={isRegisterSuccessPopupOpen} onClose={closeAllPopups} name='register-success' icon={iconRegisterSuccess} title="Вы успешно зарегистрировались!"/>
+          <PopupAuthInfo isOpen={isLoginErrorPopupOpen} onClose={closeAllPopups} name='login-error' icon={iconLoginError} title="Что-то пошло не так! Попробуйте еще раз!"/>
           { selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
           <Footer/>
         </div>
