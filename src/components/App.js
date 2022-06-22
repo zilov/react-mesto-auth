@@ -14,13 +14,18 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
+import { checkToken } from '../utils/Auth';
 
 function App() {
 
   // register / login states and functions
 
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const history = useHistory();
+
+  useEffect(() => {
+    checkToken();
+  }, [])
 
   useEffect(() => {
     if (loggedIn) {
@@ -29,7 +34,9 @@ function App() {
       history.push('/signin');
       localStorage.removeItem('jwt');
     }
-  })
+  }, [loggedIn]);
+
+
 
   // main functionality states and functions
   const [currentUser, setCurrentUser] = useState({});

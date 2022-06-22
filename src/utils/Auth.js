@@ -29,15 +29,18 @@ export const login = (email, password) => {
   ).then((response) => {return checkResponse(response, job)})
 }
 
-export const checkToken = (myJwt) => {
+export const checkToken = () => {
   const job = 'check JWT validity'
-  return fetch(
-    `${authUrl}/users/me`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${myJwt}`
+  const jwt = localStorage.getItem('jwt')
+  if (jwt) {
+    return fetch(
+      `${authUrl}/users/me`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${jwt}`
+        }
       }
-    }
-  ).then((response) => {return checkResponse(response, job)})
+    ).then((response) => {return checkResponse(response, job)})
+  }
 }
