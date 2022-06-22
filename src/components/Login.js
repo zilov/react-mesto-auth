@@ -1,6 +1,7 @@
 import { useState } from "react";
 import FormInput from "./FormInput";
 import { login } from "../utils/Auth"
+import { Link } from "react-router-dom";
 
 function Login({setLoggedIn}) {
 
@@ -29,7 +30,7 @@ function Login({setLoggedIn}) {
   }
 
   return(
-    <div> 
+    <div className="login"> 
       <h2 className="login__title">Вход</h2>
         <form className="form" id='form-login' onSubmit={handleLoginSubmit} noValidate>
           <div className="form__inputs-box">
@@ -40,6 +41,7 @@ function Login({setLoggedIn}) {
               placeholder="Email"
               maxLength='100'
               setValue= {setEmail}
+              auth={true}
             />
             <FormInput
               value={password}
@@ -48,6 +50,7 @@ function Login({setLoggedIn}) {
               placeholder="Пароль"
               maxLength='100'
               setValue= {setPassword}
+              auth={true}
             />
           </div>
           <button type="submit" className="form__submit-btn form__submit-btn_type_login">{(isLoading && 'Вхожу...') || 'Войти'}</button>

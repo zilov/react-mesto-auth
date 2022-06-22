@@ -1,6 +1,6 @@
 import React from "react";
 
-function FormInput({value, type, id, maxLength, placeholder, setValue}) {
+function FormInput({value, type, id, maxLength, placeholder, setValue, auth=false}) {
   
   // обновляй значение стейта при изменении инпута (стейт в компоненте попапа)
   const handleInput = (e) => {
@@ -12,7 +12,7 @@ function FormInput({value, type, id, maxLength, placeholder, setValue}) {
       <input
         type={type}
         id={id}
-        className="form__input"
+        className={`form__input ${auth && 'form__input_type_auth'}`}
         minLength="2"
         maxLength={maxLength || "1000"}
         value={value}

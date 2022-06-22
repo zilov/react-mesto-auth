@@ -38,7 +38,7 @@ function Register({closePopups}) {
   }
 
   return(
-    <div> 
+    <div className="login"> 
       <h2 className="login__title">Регистрация</h2>
       <form className="form" id='form-register' onSubmit={handleRegisterSubmit} noValidate>
           <div className="form__inputs-box">
@@ -48,6 +48,7 @@ function Register({closePopups}) {
               id="loginEmailInput"
               placeholder="Email"
               setValue= {setEmail}
+              auth={true}
             />
             <FormInput
               value={password}
@@ -55,15 +56,16 @@ function Register({closePopups}) {
               id="loginPasswordInput"
               placeholder="Пароль"
               setValue= {setPassword}
+              auth={true}
             />
           </div>
           <button type="submit" className="form__submit-btn form__submit-btn_type_login">
-            {(isLoading && 'Регистрирую...') || ''}
+            {(isLoading && 'Регистрирую...') || 'Зарегистрироваться'}
           </button>
         </form>
-        <p>
+        <p className="login__subtitle">
           Уже зарегистрированы?
-          <Link to="/signin">Войти</Link>
+          <Link className="login__link" to="/signin"> Войти</Link>
         </p>
     </div>
   )

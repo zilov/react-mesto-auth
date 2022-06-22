@@ -13,3 +13,5 @@ function PopupAuthInfo({name, isOpen, onClose, title, icon}) {
     </div>
   )
 }
+
+export default PopupAuthInfo;
