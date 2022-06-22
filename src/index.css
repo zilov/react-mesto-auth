@@ -6,6 +6,11 @@
 @import url("./blocks/header/header.css");
 @import url("./blocks/header/__logo/header__logo.css");
 
+@import url("./blocks/login/login.css");
+@import url("./blocks/login/login__link.css");
+@import url("./blocks/login/login__subtitle.css");
+
+
 @import url("./blocks/profile/profile.css");
 @import url("./blocks/profile/__photo/profile__photo.css");
 @import url("./blocks/profile/__name-status-box/profile__name-status-box.css");
@@ -31,10 +36,12 @@
 @import url("./blocks/form/__inputs-box/form__inputs-box.css");
 @import url("./blocks/form/__section/form__section.css");
 @import url("./blocks/form/__input/form__input.css");
+@import url("./blocks/form/__input/form__input_type_auth.css");
 @import url("./blocks/form/__input/_invalid/form__input_invalid.css");
 @import url("./blocks/form/__input-err/form__input-err.css");
 @import url("./blocks/form/__input-err/_visible/form__input-err_visible.css");
 @import url("./blocks/form/__submit-btn/form__submit-btn.css");
+@import url("./blocks/form/__submit-btn/form__submit-btn_type_login.css");
 @import url("./blocks/form/__submit-btn/_inactive/form__submit-btn_inactive.css");
 
 @import url("./blocks/cards/cards.css");

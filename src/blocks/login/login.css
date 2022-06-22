@@ -1,0 +1,13 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px auto 0;
+  color: white;
+}
+
+@media screen and (min-width: 1024px) {
+  .login {
+    margin-top: 60px;
+  }
+}

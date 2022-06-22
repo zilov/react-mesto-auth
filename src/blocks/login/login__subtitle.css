@@ -1,0 +1,9 @@
+.login__subtitle {
+  margin-top: -30px;
+}
+
+@media screen and (min-width: 1024px) {
+  .login__subtitle {
+    margin-top: -42px;
+  }
+}
