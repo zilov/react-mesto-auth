@@ -3,21 +3,21 @@ import FormInput from "./FormInput";
 import { useState } from "react";
 import { register } from "../utils/Auth"
 
-function Register({closePopups}) {
+function Register({setIsRegisterSuccessPopupOpen, setIsLoginErrorPopupOpen}) {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleRegisterError = () => {
     setIsLoading(false);
-    console.log('error in register');
     // Открыть попап ошибки
+    setIsLoginErrorPopupOpen(true);
   }
 
   const handleSuccessfulRegister = () => {
     setIsLoading(false);
-    console.log('successful register!');
     // открыть попап успешной регистрации
+    setIsRegisterSuccessPopupOpen(true)
   }
 
   const handleRegisterSubmit = (e) => {

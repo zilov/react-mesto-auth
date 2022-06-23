@@ -8,7 +8,7 @@ import Register from './Register';
 import Footer from './Footer';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState } from "react";
-import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -26,12 +26,12 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegisterSuccessPopupOpen, setIsRegisterSuccessPopupOpen] = useState(false);
   const [isLoginErrorPopupOpen, setIsLoginErrorPopupOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState('zilov.d@gmail.com')
 
   const history = useHistory();
 
   useEffect(() => {
-    checkToken();
+    checkToken().then(() => setLoggedIn(true))
+    .catch(() => setLoggedIn(false))
   }, [])
 
   useEffect(() => {
@@ -43,7 +43,11 @@ function App() {
     }
   }, [loggedIn]);
 
-
+  
+  const handleSuccessLoginPopupClose = () => {
+    setLoggedIn(true);
+    closeAllPopups();
+  }
 
   // main functionality states and functions
   const [currentUser, setCurrentUser] = useState({});
@@ -55,6 +59,7 @@ function App() {
 
   useEffect(() => {
     api.getProfileInfo().then((res) => {
+      res.email = '';
       setCurrentUser(res);
     }).catch((err) => {console.log(`Error in getting initial user data ${err}`)})
 
@@ -90,6 +95,7 @@ function App() {
 
   function handleUpdateUser(name, about) {
     api.editProfileInfo(name, about).then((newUserInfo) => {
+      newUserInfo.email = '';
       setCurrentUser(newUserInfo);
       closeAllPopups();
     }).catch((err) => {console.log(`Error in update user data ${err}`)})
@@ -97,6 +103,7 @@ function App() {
 
   function handleUpdateAvatar(link) {
     api.editProfilePhoto(link).then((newUserInfo) => {
+      newUserInfo.email = '';
       setCurrentUser(newUserInfo);
       closeAllPopups();
     }).catch((err) => {console.log(`Error in avatar update ${err}`)})
@@ -130,17 +137,21 @@ function App() {
       <div className="App">
         <div className='page'>
           <Header 
-            logo={logo} 
-            email={userEmail}
+            logo={logo}
             loggedIn={loggedIn}
             setLoggedIn={setLoggedIn}
           /> 
           <Switch>
             <Route path="/signup">
-              <Register/>
+              <Register 
+                setIsRegisterSuccessPopupOpen = {setIsRegisterSuccessPopupOpen}
+                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen}/>
             </Route>
             <Route path="/signin">
-              <Login setLoggedIn={setLoggedIn}/>
+              <Login 
+                setLoggedIn={setLoggedIn} 
+                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen} 
+              />
             </Route>
             <ProtectedRoute
                 path='/'
@@ -169,7 +180,7 @@ function App() {
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
           <AddPlacePopup isOpen={isAddCardPopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace}/>
           <PopupAuthInfo isOpen={isRegisterSuccessPopupOpen} onClose={closeAllPopups} name='register-success' icon={iconRegisterSuccess} title="Вы успешно зарегистрировались!"/>
-          <PopupAuthInfo isOpen={isLoginErrorPopupOpen} onClose={closeAllPopups} name='login-error' icon={iconLoginError} title="Что-то пошло не так! Попробуйте еще раз!"/>
+          <PopupAuthInfo isOpen={isLoginErrorPopupOpen} onClose={handleSuccessLoginPopupClose} name='login-error' icon={iconLoginError} title="Что-то пошло не так! Попробуйте еще раз!"/>
           { selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
           {loggedIn && <Footer/>}
         </div>

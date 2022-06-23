@@ -1,18 +1,17 @@
-import { useState } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { useContext, useState } from "react";
 import FormInput from "./FormInput";
 import { login } from "../utils/Auth"
-import { Link } from "react-router-dom";
 
-function Login({setLoggedIn}) {
-
+function Login({setLoggedIn, setIsLoginErrorPopupOpen}) {
+  const currentUser = useContext(CurrentUserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLoginError = () => {
+    setIsLoginErrorPopupOpen(true)
     setIsLoading(false);
-    console.log('error in login');
-    return;
   }
 
   const handleLoginSubmit = (e) => {
@@ -20,8 +19,8 @@ function Login({setLoggedIn}) {
     // если не успешно - открываем попап ошибки
     e.preventDefault();
     setIsLoading(true);
-    console.log(email, password);
     login(email, password).then((res) => {
+      currentUser.email = email;
       setEmail('');
       setPassword('');
       setLoggedIn(true);

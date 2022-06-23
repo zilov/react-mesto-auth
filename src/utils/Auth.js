@@ -35,12 +35,14 @@ export const checkToken = () => {
   if (jwt) {
     return fetch(
       `${authUrl}/users/me`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${jwt}`
         }
       }
     ).then((response) => {return checkResponse(response, job)})
+  } else {
+    return Promise.reject();
   }
 }
