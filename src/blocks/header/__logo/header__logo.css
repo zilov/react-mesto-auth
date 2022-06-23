@@ -1,4 +1,6 @@
 .header__logo {
+    display: flex;
+    justify-self: flex-start;
     width: 102.74px;
     height: 24.4px;
 

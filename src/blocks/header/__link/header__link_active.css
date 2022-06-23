@@ -1,0 +1,5 @@
+.header__link_active {
+  display: flex;
+  grid-column: 3;
+  margin-top: 16px;
+}

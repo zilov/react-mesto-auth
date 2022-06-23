@@ -1,11 +1,11 @@
 .form__submit-btn_type_login {
-  margin: 160px auto 20px;
+  margin: 150px auto 20px;
   background-color: white;
   color: black;
 }
 
 @media screen and (min-width: 1024px) {
   .form__submit-btn_type_login  {
-    margin-top: 200px;
+    margin-top: 190px;
   }
 }

@@ -1,0 +1,8 @@
+.header__email {
+  display: flex;
+  margin: 0;
+  height: min-content;
+  grid-column: 2;
+  margin-top: 16px;
+  justify-self: end;
+}

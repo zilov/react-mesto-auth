@@ -8,7 +8,7 @@ import Register from './Register';
 import Footer from './Footer';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState } from "react";
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -26,7 +26,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegisterSuccessPopupOpen, setIsRegisterSuccessPopupOpen] = useState(false);
   const [isLoginErrorPopupOpen, setIsLoginErrorPopupOpen] = useState(false);
-
+  const [userEmail, setUserEmail] = useState('zilov.d@gmail.com')
 
   const history = useHistory();
 
@@ -129,7 +129,12 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className='page'>
-          <Header logo={logo} /> 
+          <Header 
+            logo={logo} 
+            email={userEmail}
+            loggedIn={loggedIn}
+            setLoggedIn={setLoggedIn}
+          /> 
           <Switch>
             <Route path="/signup">
               <Register/>
@@ -166,7 +171,7 @@ function App() {
           <PopupAuthInfo isOpen={isRegisterSuccessPopupOpen} onClose={closeAllPopups} name='register-success' icon={iconRegisterSuccess} title="Вы успешно зарегистрировались!"/>
           <PopupAuthInfo isOpen={isLoginErrorPopupOpen} onClose={closeAllPopups} name='login-error' icon={iconLoginError} title="Что-то пошло не так! Попробуйте еще раз!"/>
           { selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
-          <Footer/>
+          {loggedIn && <Footer/>}
         </div>
       </div>
     </CurrentUserContext.Provider>

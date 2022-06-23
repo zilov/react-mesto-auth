@@ -1,0 +1,10 @@
+.header__link {
+  display: none;
+  margin-left: 24px;
+  height: min-content;
+  text-decoration: none;
+}
+
+.header__link:visited {
+  color: white;
+}
