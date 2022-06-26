@@ -1,16 +1,13 @@
-import { useContext } from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { NavLink } from "react-router-dom";
 
-function Header({logo, loggedIn, setLoggedIn}) {
-  const currentUser = useContext(CurrentUserContext);
+function Header({logo, loggedIn, setLoggedIn, email}) {
   return (
     <header className="header">
       <img src={logo} alt="лого" className="header__logo" />
       {loggedIn 
         ?
           <>
-            <p className="header__email">{currentUser.email}</p>
+            <p className="header__email">{email}</p>
             <NavLink 
               exact to="/" 
               activeStyle={{color:'#A9A9A9'}}

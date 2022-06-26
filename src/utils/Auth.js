@@ -15,7 +15,7 @@ export const register = (email, password) => {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email, password})
     }
-  ).then((response) => {return checkResponse(response, job)})  
+  ).then((response) => {return checkResponse(response, job)})
 }
 
 export const login = (email, password) => {

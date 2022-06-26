@@ -12,7 +12,7 @@ function Main({cards, onEditProfile, onEditAvatar, onAddPlace,
     <main id="main">
       <section className="profile">
         <div className="profile__photo" alt="изображение профиля" style={ { backgroundImage: `url(${currentUser.avatar})` }}>
-          <button className="profile__edit-photo-btn" onClick={onEditAvatar}></button>
+          <button className="profile__edit-photo-btn" onClick={onEditAvatar}/>
         </div>
 
         <div className="profile__name-status-box">
@@ -33,15 +33,6 @@ function Main({cards, onEditProfile, onEditAvatar, onAddPlace,
           ))
         }
       </section>
-
-      <PopupWithForm
-        title="Вы уверены"
-        name="delete-card"
-        submitBtnText="Да"
-        onClose={onClose}
-        inputList={[]}
-      />
-      
     </main>
   )
 }

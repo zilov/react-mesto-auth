@@ -12,19 +12,26 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     onUpdateAvatar( link )
   }
 
+  const handleClose = () => {
+    setIsLoading(false);
+    onClose();
+  }
+
   // начальный стейт аватара цепляется из данных юзера
   const [link, setLink] = React.useState('');
 
   // при обновлении данных пользователя обнови стейт
   React.useEffect(() => {
-    setLink('');
+    if (isOpen) {
+      setLink('');
+    }
   }, [isOpen]);
 
   return( 
     <PopupWithForm
       title="Обновить аватар"
       name="change-profile-photo"
-      onClose={onClose}
+      onClose={handleClose}
       isOpen={isOpen}
       isLoading={isLoading}
       onSubmit={handleSubmit}

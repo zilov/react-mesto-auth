@@ -16,6 +16,11 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     onUpdateUser( name, description )
   }
 
+  const handleClose = () => {
+    setIsLoading(false);
+    onClose();
+  }
+
   // начальные стейты для имени и описания цепляются от данных юзера
   const [name, setName] = React.useState(currentUser.name);
   const [description, setDescription] = React.useState(currentUser.about);
@@ -30,7 +35,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     <PopupWithForm
       title="Редактировать профиль"
       name="edit-profile"
-      onClose={onClose}
+      onClose={handleClose}
       isOpen={isOpen}
       isLoading={isLoading}
       onSubmit={handleSubmit}

@@ -26,6 +26,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegisterSuccessPopupOpen, setIsRegisterSuccessPopupOpen] = useState(false);
   const [isLoginErrorPopupOpen, setIsLoginErrorPopupOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '');
 
   const history = useHistory();
 
@@ -45,7 +46,7 @@ function App() {
 
   
   const handleSuccessLoginPopupClose = () => {
-    setLoggedIn(true);
+    checkToken().then(() => setLoggedIn(true));
     closeAllPopups();
   }
 
@@ -58,15 +59,16 @@ function App() {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api.getProfileInfo().then((res) => {
-      res.email = '';
-      setCurrentUser(res);
-    }).catch((err) => {console.log(`Error in getting initial user data ${err}`)})
-
-    api.getCardsList().then((res) => {
-      setCards(res.map(item => item))
-    }).catch((err) => {console.log(`Error in getting initial card list ${err}`)})
-  }, []);
+    if (loggedIn) {
+      api.getProfileInfo().then((res) => {
+        setCurrentUser(res);
+      }).catch((err) => {console.log(`Error in getting initial user data ${err}`)})
+  
+      api.getCardsList().then((res) => {
+        setCards(res.map(item => item))
+      }).catch((err) => {console.log(`Error in getting initial card list ${err}`)})
+    }
+  }, [loggedIn]);
   
   function handleEditAvatarClick() {
     setEditAvatarPopupOpen(true)
@@ -95,7 +97,6 @@ function App() {
 
   function handleUpdateUser(name, about) {
     api.editProfileInfo(name, about).then((newUserInfo) => {
-      newUserInfo.email = '';
       setCurrentUser(newUserInfo);
       closeAllPopups();
     }).catch((err) => {console.log(`Error in update user data ${err}`)})
@@ -103,7 +104,6 @@ function App() {
 
   function handleUpdateAvatar(link) {
     api.editProfilePhoto(link).then((newUserInfo) => {
-      newUserInfo.email = '';
       setCurrentUser(newUserInfo);
       closeAllPopups();
     }).catch((err) => {console.log(`Error in avatar update ${err}`)})
@@ -140,6 +140,7 @@ function App() {
             logo={logo}
             loggedIn={loggedIn}
             setLoggedIn={setLoggedIn}
+            email={userEmail}
           /> 
           <Switch>
             <Route path="/signup">
@@ -149,7 +150,8 @@ function App() {
             </Route>
             <Route path="/signin">
               <Login 
-                setLoggedIn={setLoggedIn} 
+                setLoggedIn={setLoggedIn}
+                setUserEmail={setUserEmail}
                 setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen} 
               />
             </Route>
@@ -176,11 +178,35 @@ function App() {
               {loggedIn ? <Redirect to="/"/> : <Redirect to="/signin"/>}
             </Route>
           </Switch>    
-          <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
-          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
-          <AddPlacePopup isOpen={isAddCardPopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace}/>
-          <PopupAuthInfo isOpen={isRegisterSuccessPopupOpen} onClose={closeAllPopups} name='register-success' icon={iconRegisterSuccess} title="Вы успешно зарегистрировались!"/>
-          <PopupAuthInfo isOpen={isLoginErrorPopupOpen} onClose={handleSuccessLoginPopupClose} name='login-error' icon={iconLoginError} title="Что-то пошло не так! Попробуйте еще раз!"/>
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+          <AddPlacePopup
+            isOpen={isAddCardPopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlace}
+          />
+          <PopupAuthInfo
+            isOpen={isRegisterSuccessPopupOpen}
+            onClose={closeAllPopups}
+            name='register-success'
+            icon={iconRegisterSuccess}
+            title="Вы успешно зарегистрировались!"
+          />
+          <PopupAuthInfo
+            isOpen={isLoginErrorPopupOpen}
+            onClose={handleSuccessLoginPopupClose}
+            name='login-error'
+            icon={iconLoginError}
+            title="Что-то пошло не так! Попробуйте еще раз!"
+          />
           { selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
           {loggedIn && <Footer/>}
         </div>

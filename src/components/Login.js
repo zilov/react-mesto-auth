@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import FormInput from "./FormInput";
 import { login } from "../utils/Auth"
 
-function Login({setLoggedIn, setIsLoginErrorPopupOpen}) {
+function Login({setLoggedIn, setIsLoginErrorPopupOpen, setUserEmail}) {
   const currentUser = useContext(CurrentUserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -20,7 +20,8 @@ function Login({setLoggedIn, setIsLoginErrorPopupOpen}) {
     e.preventDefault();
     setIsLoading(true);
     login(email, password).then((res) => {
-      currentUser.email = email;
+      localStorage.setItem('userEmail', email)
+      setUserEmail(localStorage.getItem('userEmail'))
       setEmail('');
       setPassword('');
       setLoggedIn(true);

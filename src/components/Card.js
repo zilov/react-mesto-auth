@@ -26,7 +26,7 @@ function Card({onCardLike, onCardClick, onCardDelete, ...cardInfo}) {
   return(
     <article className="card">
       {isOwn && <button type="button" className="card__remove-btn" onClick={handleDeleteClick}></button>}
-      <img 
+      <div 
         className="card__image" 
         style={{ backgroundImage: `url(${cardInfo.link})`}} 
         onClick={handleClick} alt={cardInfo.name}

@@ -24,15 +24,12 @@ function Register({setIsRegisterSuccessPopupOpen, setIsLoginErrorPopupOpen}) {
     // сравниваем данные с данными сервера
     e.preventDefault();
     setIsLoading(true);
-    register(email, password).then(() => {
-      setEmail('');
-      setPassword('');
-      handleSuccessfulRegister();
-      //перенаправляем на страницу логина
-      // setTimeout(() => {
-      //   closePopups()
-      //   history.push('/signin')
-      // }, 3000);
+    register(email, password).then((res) => {
+      if (res.ok) {
+        setEmail('');
+        setPassword('');
+        handleSuccessfulRegister();
+      }
     })
     .catch(() => handleRegisterError());
   }

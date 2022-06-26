@@ -12,6 +12,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     onAddPlace(cardName, cardLink);
   }
 
+  const handleClose = () => {
+    setIsLoading(false);
+    onClose();
+  }
+
   React.useEffect(() => {
     if (isOpen) {
       setCardName('');
@@ -28,7 +33,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       title="Новое место"
       name="add-card"
       submitBtnText="Создать"
-      onClose={onClose}
+      onClose={handleClose}
       isOpen={isOpen}
       isLoading={isLoading}
       loadingText="Создаю..."
