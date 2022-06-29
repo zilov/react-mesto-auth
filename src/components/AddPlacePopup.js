@@ -1,20 +1,13 @@
 import PopupWithForm from "./PopupWithForm";
 import React from "react";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-
-  const [isLoading, setIsLoading] = React.useState(false);
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading, setIsLoading }) {
 
   // при сабмите возьми значения стейтов (обновляются в formInput) и отправь через api на бек (отправка в App.js)
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    onAddPlace(cardName, cardLink);
-  }
-
-  const handleClose = () => {
-    setIsLoading(false);
-    onClose();
+    onAddPlace(cardName, cardLink).finally(setIsLoading(false));
   }
 
   React.useEffect(() => {
@@ -33,7 +26,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       title="Новое место"
       name="add-card"
       submitBtnText="Создать"
-      onClose={handleClose}
+      onClose={onClose}
       isOpen={isOpen}
       isLoading={isLoading}
       loadingText="Создаю..."

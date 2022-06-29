@@ -27,6 +27,7 @@ function App() {
   const [isRegisterSuccessPopupOpen, setIsRegisterSuccessPopupOpen] = useState(false);
   const [isLoginErrorPopupOpen, setIsLoginErrorPopupOpen] = useState(false);
   const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '');
+  const [isFormLoading, setIsFormLoading] = useState(false);
 
   const history = useHistory();
 
@@ -49,6 +50,11 @@ function App() {
     checkToken().then(() => setLoggedIn(true));
     closeAllPopups();
   }
+
+  const handleSuccessRegisterPopupClose = () => {
+    history.push('/signin');
+    closeAllPopups();
+  } 
 
   // main functionality states and functions
   const [currentUser, setCurrentUser] = useState({});
@@ -87,6 +93,7 @@ function App() {
   }
   
   function closeAllPopups() {
+    setIsFormLoading(false);
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddCardPopupOpen(false);
@@ -146,13 +153,18 @@ function App() {
             <Route path="/signup">
               <Register 
                 setIsRegisterSuccessPopupOpen = {setIsRegisterSuccessPopupOpen}
-                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen}/>
+                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen}
+                isLoading={isFormLoading}
+                setIsLoading={setIsFormLoading}
+              />
             </Route>
             <Route path="/signin">
               <Login 
                 setLoggedIn={setLoggedIn}
                 setUserEmail={setUserEmail}
-                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen} 
+                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen}
+                isLoading={isFormLoading}
+                setIsLoading={setIsFormLoading} 
               />
             </Route>
             <ProtectedRoute
@@ -182,20 +194,26 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
+            isLoading={isFormLoading}
+            setIsLoading={setIsFormLoading}
           />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
+            isLoading={isFormLoading}
+            setIsLoading={setIsFormLoading}
           />
           <AddPlacePopup
             isOpen={isAddCardPopupOpen}
             onClose={closeAllPopups}
             onAddPlace={handleAddPlace}
+            isLoading={isFormLoading}
+            setIsLoading={setIsFormLoading}
           />
           <PopupAuthInfo
             isOpen={isRegisterSuccessPopupOpen}
-            onClose={closeAllPopups}
+            onClose={handleSuccessRegisterPopupClose}
             name='register-success'
             icon={iconRegisterSuccess}
             title="Вы успешно зарегистрировались!"

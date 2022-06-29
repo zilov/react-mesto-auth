@@ -2,9 +2,7 @@ import PopupWithForm from "./PopupWithForm";
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
-
-  const [isLoading, setIsLoading] = React.useState(false);
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading, setIsLoading }) {
   
   // подтягиваю данные юзера из контекста
   const currentUser = React.useContext(CurrentUserContext);
@@ -13,12 +11,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    onUpdateUser( name, description )
-  }
-
-  const handleClose = () => {
-    setIsLoading(false);
-    onClose();
+    onUpdateUser( name, description ).finally(setIsLoading(false))
   }
 
   // начальные стейты для имени и описания цепляются от данных юзера
@@ -35,7 +28,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     <PopupWithForm
       title="Редактировать профиль"
       name="edit-profile"
-      onClose={handleClose}
+      onClose={onClose}
       isOpen={isOpen}
       isLoading={isLoading}
       onSubmit={handleSubmit}

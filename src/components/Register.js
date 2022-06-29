@@ -3,8 +3,7 @@ import FormInput from "./FormInput";
 import { useState } from "react";
 import { register } from "../utils/Auth"
 
-function Register({setIsRegisterSuccessPopupOpen, setIsLoginErrorPopupOpen}) {
-  const [isLoading, setIsLoading] = useState(false);
+function Register({setIsRegisterSuccessPopupOpen, setIsLoginErrorPopupOpen, isLoading, setIsLoading}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,10 +24,10 @@ function Register({setIsRegisterSuccessPopupOpen, setIsLoginErrorPopupOpen}) {
     e.preventDefault();
     setIsLoading(true);
     register(email, password).then((res) => {
-      if (res.ok) {
+      if (res.data) {
         setEmail('');
         setPassword('');
-        handleSuccessfulRegister();
+        handleSuccessfulRegister(); 
       }
     })
     .catch(() => handleRegisterError());

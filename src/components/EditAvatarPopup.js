@@ -1,20 +1,13 @@
 import PopupWithForm from "./PopupWithForm";
 import React from "react";
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
-
-  const [isLoading, setIsLoading] = React.useState(false);
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading, setIsLoading }) {
 
   // при сабмите возьми значения стейта (обновляются в formInput) и отправь через api на бек (отправка в App.js)
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    onUpdateAvatar( link )
-  }
-
-  const handleClose = () => {
-    setIsLoading(false);
-    onClose();
+    onUpdateAvatar( link ).finally(setIsLoading(false))
   }
 
   // начальный стейт аватара цепляется из данных юзера
@@ -31,7 +24,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     <PopupWithForm
       title="Обновить аватар"
       name="change-profile-photo"
-      onClose={handleClose}
+      onClose={onClose}
       isOpen={isOpen}
       isLoading={isLoading}
       onSubmit={handleSubmit}
