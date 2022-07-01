@@ -3,40 +3,21 @@ import FormInput from "./FormInput";
 import { useState } from "react";
 import { register } from "../utils/Auth"
 
-function Register({setIsRegisterSuccessPopupOpen, setIsLoginErrorPopupOpen, isLoading, setIsLoading}) {
+function Register({ isLoading, handleRegisterSubmit }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegisterError = () => {
-    setIsLoading(false);
-    // Открыть попап ошибки
-    setIsLoginErrorPopupOpen(true);
-  }
-
-  const handleSuccessfulRegister = () => {
-    setIsLoading(false);
-    // открыть попап успешной регистрации
-    setIsRegisterSuccessPopupOpen(true)
-  }
-
-  const handleRegisterSubmit = (e) => {
-    // сравниваем данные с данными сервера
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    register(email, password).then((res) => {
-      if (res.data) {
-        setEmail('');
-        setPassword('');
-        handleSuccessfulRegister(); 
-      }
-    })
-    .catch(() => handleRegisterError());
+    handleRegisterSubmit(email, password);
+    setEmail('');
+    setPassword('');
   }
 
   return(
     <div className="login"> 
       <h2 className="login__title">Регистрация</h2>
-      <form className="form" id='form-register' onSubmit={handleRegisterSubmit} noValidate>
+      <form className="form" id='form-register' onSubmit={handleSubmit} noValidate>
           <div className="form__inputs-box">
             <FormInput 
               value={email}

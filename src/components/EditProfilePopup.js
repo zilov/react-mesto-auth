@@ -2,7 +2,7 @@ import PopupWithForm from "./PopupWithForm";
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading, setIsLoading }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   
   // подтягиваю данные юзера из контекста
   const currentUser = React.useContext(CurrentUserContext);
@@ -10,8 +10,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading, setIsLoadi
   // при сабмите возьми значения стейтов (обновляются в formInput) и отправь через api на бек (отправка в App.js)
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    onUpdateUser( name, description ).finally(setIsLoading(false))
+    onUpdateUser( name, description )
   }
 
   // начальные стейты для имени и описания цепляются от данных юзера

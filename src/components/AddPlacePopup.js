@@ -1,13 +1,12 @@
 import PopupWithForm from "./PopupWithForm";
 import React from "react";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading, setIsLoading }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
 
   // при сабмите возьми значения стейтов (обновляются в formInput) и отправь через api на бек (отправка в App.js)
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    onAddPlace(cardName, cardLink).finally(setIsLoading(false));
+    onAddPlace(cardName, cardLink);
   }
 
   React.useEffect(() => {

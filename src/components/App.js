@@ -18,6 +18,7 @@ import { checkToken } from '../utils/Auth';
 import PopupAuthInfo from './PopupAuthInfo';
 import iconLoginError from '../images/popup_auth-info-error.svg';
 import iconRegisterSuccess from '../images/popup_auth-info-success.svg';
+import { login, register } from "../utils/Auth"
 
 function App() {
 
@@ -45,6 +46,48 @@ function App() {
     }
   }, [loggedIn]);
 
+
+  const handleLoginError = () => {
+    setIsLoginErrorPopupOpen(true)
+    setIsFormLoading(false);
+  }
+
+  const handleLoginSubmit = (email, password) => {
+    // сравниваем данные с данными сервера, если успешно залогинились - обновляем токен
+    // если не успешно - открываем попап ошибки
+    setIsFormLoading(true);
+    login(email, password).then((res) => {
+      localStorage.setItem('userEmail', email)
+      setUserEmail(email)
+      setLoggedIn(true);
+      localStorage.setItem('jwt', res.token);
+    }).catch(() => handleLoginError())
+    .finally(setIsFormLoading(false));
+  }
+
+  const handleRegisterError = () => {
+    setIsFormLoading(false);
+    // Открыть попап ошибки
+    setIsLoginErrorPopupOpen(true);
+  }
+
+  const handleSuccessfulRegister = () => {
+    setIsFormLoading(false);
+    // открыть попап успешной регистрации
+    setIsRegisterSuccessPopupOpen(true)
+  }
+
+  const handleRegisterSubmit = (email, password) => {
+    // сравниваем данные с данными сервера
+    setIsFormLoading(true);
+    register(email, password).then((res) => {
+      if (res.data) {
+        handleSuccessfulRegister(); 
+      }
+    })
+    .catch(() => handleRegisterError())
+    .finally(setIsFormLoading(false));
+  }
   
   const handleSuccessLoginPopupClose = () => {
     checkToken().then(() => setLoggedIn(true));
@@ -103,24 +146,30 @@ function App() {
   }
 
   function handleUpdateUser(name, about) {
+    setIsFormLoading(true);
     api.editProfileInfo(name, about).then((newUserInfo) => {
       setCurrentUser(newUserInfo);
       closeAllPopups();
     }).catch((err) => {console.log(`Error in update user data ${err}`)})
+    .finally(setIsFormLoading(false))
   }
 
   function handleUpdateAvatar(link) {
+    setIsFormLoading(true);
     api.editProfilePhoto(link).then((newUserInfo) => {
       setCurrentUser(newUserInfo);
       closeAllPopups();
     }).catch((err) => {console.log(`Error in avatar update ${err}`)})
+    .finally(setIsFormLoading(false))
   }
 
   function handleAddPlace(cardName, cardLink) {
+    setIsFormLoading(true);
     api.addNewCard(cardName, cardLink).then((newCardInfo) => {
       setCards([newCardInfo, ...cards]);
       closeAllPopups();
     }).catch((err) => {console.log(`Error in adding new card ${err}`)})
+    .finally(setIsFormLoading(false))
   }
 
   function handleCardLike(card) {
@@ -152,19 +201,14 @@ function App() {
           <Switch>
             <Route path="/signup">
               <Register 
-                setIsRegisterSuccessPopupOpen = {setIsRegisterSuccessPopupOpen}
-                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen}
                 isLoading={isFormLoading}
-                setIsLoading={setIsFormLoading}
+                handleRegisterSubmit={handleRegisterSubmit}
               />
             </Route>
             <Route path="/signin">
               <Login 
-                setLoggedIn={setLoggedIn}
-                setUserEmail={setUserEmail}
-                setIsLoginErrorPopupOpen={setIsLoginErrorPopupOpen}
                 isLoading={isFormLoading}
-                setIsLoading={setIsFormLoading} 
+                handleLoginSubmit={handleLoginSubmit} 
               />
             </Route>
             <ProtectedRoute
@@ -195,21 +239,18 @@ function App() {
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
             isLoading={isFormLoading}
-            setIsLoading={setIsFormLoading}
           />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
             isLoading={isFormLoading}
-            setIsLoading={setIsFormLoading}
           />
           <AddPlacePopup
             isOpen={isAddCardPopupOpen}
             onClose={closeAllPopups}
             onAddPlace={handleAddPlace}
             isLoading={isFormLoading}
-            setIsLoading={setIsFormLoading}
           />
           <PopupAuthInfo
             isOpen={isRegisterSuccessPopupOpen}

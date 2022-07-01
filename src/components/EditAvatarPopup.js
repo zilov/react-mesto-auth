@@ -1,13 +1,12 @@
 import PopupWithForm from "./PopupWithForm";
 import React from "react";
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading, setIsLoading }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
 
   // при сабмите возьми значения стейта (обновляются в formInput) и отправь через api на бек (отправка в App.js)
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    onUpdateAvatar( link ).finally(setIsLoading(false))
+    onUpdateAvatar( link )
   }
 
   // начальный стейт аватара цепляется из данных юзера

@@ -1,36 +1,21 @@
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import FormInput from "./FormInput";
-import { login } from "../utils/Auth"
 
-function Login({setLoggedIn, setIsLoginErrorPopupOpen, setUserEmail, isLoading, setIsLoading}) {
+function Login({ isLoading, handleLoginSubmit }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLoginError = () => {
-    setIsLoginErrorPopupOpen(true)
-    setIsLoading(false);
-  }
-
-  const handleLoginSubmit = (e) => {
-    // сравниваем данные с данными сервера, если успешно залогинились - обновляем токен
-    // если не успешно - открываем попап ошибки
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    login(email, password).then((res) => {
-      localStorage.setItem('userEmail', email)
-      setUserEmail(localStorage.getItem('userEmail'))
-      setEmail('');
-      setPassword('');
-      setLoggedIn(true);
-      localStorage.setItem('jwt', res.token);
-    }).catch(() => handleLoginError());
+    handleLoginSubmit(email, password);
+    setEmail('');
+    setPassword('');
   }
 
   return(
     <div className="login"> 
       <h2 className="login__title">Вход</h2>
-        <form className="form" id='form-login' onSubmit={handleLoginSubmit} noValidate>
+        <form className="form" id='form-login' onSubmit={handleSubmit} noValidate>
           <div className="form__inputs-box">
             <FormInput
               value={email}
