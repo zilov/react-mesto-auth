@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
 import { useState } from "react";
-import { register } from "../utils/Auth"
 
 function Register({ isLoading, handleRegisterSubmit }) {
   const [email, setEmail] = useState('');

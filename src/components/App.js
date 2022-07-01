@@ -16,8 +16,8 @@ import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import { checkToken } from '../utils/Auth';
 import PopupAuthInfo from './PopupAuthInfo';
-import iconLoginError from '../images/popup_auth-info-error.svg';
-import iconRegisterSuccess from '../images/popup_auth-info-success.svg';
+import iconError from '../images/popup_auth-info-error.svg';
+import iconSuccess from '../images/popup_auth-info-success.svg';
 import { login, register } from "../utils/Auth"
 
 function App() {
@@ -25,10 +25,10 @@ function App() {
   // register / login states and functions
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isRegisterSuccessPopupOpen, setIsRegisterSuccessPopupOpen] = useState(false);
-  const [isLoginErrorPopupOpen, setIsLoginErrorPopupOpen] = useState(false);
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
   const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '');
   const [isFormLoading, setIsFormLoading] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const history = useHistory();
 
@@ -48,7 +48,8 @@ function App() {
 
 
   const handleLoginError = () => {
-    setIsLoginErrorPopupOpen(true)
+    setLoginSuccess(false);
+    setIsRegisterPopupOpen(true)
     setIsFormLoading(false);
   }
 
@@ -58,7 +59,7 @@ function App() {
     setIsFormLoading(true);
     login(email, password).then((res) => {
       localStorage.setItem('userEmail', email)
-      setUserEmail(email)
+      setUserEmail(email);
       setLoggedIn(true);
       localStorage.setItem('jwt', res.token);
     }).catch(() => handleLoginError())
@@ -68,13 +69,15 @@ function App() {
   const handleRegisterError = () => {
     setIsFormLoading(false);
     // Открыть попап ошибки
-    setIsLoginErrorPopupOpen(true);
+    setLoginSuccess(false);
+    setIsRegisterPopupOpen(true);
   }
 
-  const handleSuccessfulRegister = () => {
+  const handleRegisterSuccess = () => {
     setIsFormLoading(false);
     // открыть попап успешной регистрации
-    setIsRegisterSuccessPopupOpen(true)
+    setLoginSuccess(true);
+    setIsRegisterPopupOpen(true)
   }
 
   const handleRegisterSubmit = (email, password) => {
@@ -82,16 +85,11 @@ function App() {
     setIsFormLoading(true);
     register(email, password).then((res) => {
       if (res.data) {
-        handleSuccessfulRegister(); 
+        handleRegisterSuccess(); 
       }
     })
     .catch(() => handleRegisterError())
     .finally(setIsFormLoading(false));
-  }
-  
-  const handleSuccessLoginPopupClose = () => {
-    checkToken().then(() => setLoggedIn(true));
-    closeAllPopups();
   }
 
   const handleSuccessRegisterPopupClose = () => {
@@ -141,8 +139,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddCardPopupOpen(false);
     setSelectedCard(null);
-    setIsRegisterSuccessPopupOpen(false);
-    setIsLoginErrorPopupOpen(false);
+    setIsRegisterPopupOpen(false);
   }
 
   function handleUpdateUser(name, about) {
@@ -253,18 +250,11 @@ function App() {
             isLoading={isFormLoading}
           />
           <PopupAuthInfo
-            isOpen={isRegisterSuccessPopupOpen}
-            onClose={handleSuccessRegisterPopupClose}
-            name='register-success'
-            icon={iconRegisterSuccess}
-            title="Вы успешно зарегистрировались!"
-          />
-          <PopupAuthInfo
-            isOpen={isLoginErrorPopupOpen}
-            onClose={handleSuccessLoginPopupClose}
-            name='login-error'
-            icon={iconLoginError}
-            title="Что-то пошло не так! Попробуйте еще раз!"
+            isOpen={isRegisterPopupOpen}
+            onClose={loginSuccess ? handleSuccessRegisterPopupClose : closeAllPopups}
+            name='register-info'
+            icon={loginSuccess ? iconSuccess : iconError}
+            title={loginSuccess ? "Вы успешно зарегистрировались!" : "Что-то пошло не так! Попробуйте еще раз!"}
           />
           { selectedCard && <ImagePopup card={selectedCard} onClose={closeAllPopups} />}
           {loggedIn && <Footer/>}
