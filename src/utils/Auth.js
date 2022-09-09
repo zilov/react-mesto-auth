@@ -1,4 +1,4 @@
-const authUrl = 'https://auth.nomoreparties.co'
+const authUrl = 'http://mestofront.nomoredomains.sbs/api'
 
 function checkResponse(res, job) {
   if (res.ok) {
@@ -12,6 +12,7 @@ export const register = (email, password) => {
   return fetch(
     `${authUrl}/signup`, {
       method: 'POST',
+      credentials: 'include',
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email, password})
     }
@@ -23,6 +24,7 @@ export const login = (email, password) => {
   return fetch(
     `${authUrl}/signin`, {
       method: 'POST',
+      credentials: 'include',
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email, password}),
     }
@@ -36,6 +38,7 @@ export const checkToken = () => {
     return fetch(
       `${authUrl}/users/me`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${jwt}`

@@ -17,6 +17,7 @@ class Api {
     const job = 'Get card list'
     return fetch(`${this._url}/cards`, {
       method: "GET",
+      credentials: 'include',
       headers: this._headers,
     }).then((res) => {return this._checkResponse(res, job)})
   }
@@ -25,6 +26,7 @@ class Api {
     const job = 'Get user info'
     return fetch(`${this._url}/users/me`, {
       method: "GET",
+      credentials: 'include',
       headers: this._headers,
     }).then((res) => {return this._checkResponse(res, job)})
   }
@@ -33,6 +35,7 @@ class Api {
     const job = 'Edit user info'
     return fetch(`${this._url}/users/me`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: newName,
@@ -45,6 +48,7 @@ class Api {
     const job = 'Edit user photo'
     return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         avatar: photoUrl
@@ -56,6 +60,7 @@ class Api {
     const job = 'Edit adding new card'
     return fetch(`${this._url}/cards`, {
       method: "POST",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: cardName,
@@ -68,6 +73,7 @@ class Api {
     const job = 'Deleting card'
     return fetch(`${this._url}/cards/${id}`, {
       method: "DELETE",
+      credentials: 'include',
       headers: this._headers,
     }).then((res) => {return this._checkResponse(res, job)})
   }
@@ -76,6 +82,7 @@ class Api {
     const job = 'Adding like to card'
     return fetch(`${this._url}/cards/${id}/likes`, {
       method: "PUT",
+      credentials: 'include',
       headers: this._headers,
     }).then((res) => {return this._checkResponse(res, job)})
   }
@@ -84,6 +91,7 @@ class Api {
     const job = 'Deleting like to card'
     return fetch(`${this._url}/cards/${id}/likes`, {
       method: "DELETE",
+      credentials: 'include',
       headers: this._headers,
     }).then((res) => {return this._checkResponse(res, job)})
   }
