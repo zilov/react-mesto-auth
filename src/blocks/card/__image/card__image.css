@@ -1,6 +1,9 @@
 .card__image {
   width: 282px;
   height: 282px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   object-fit: cover;
   cursor: pointer;
 }

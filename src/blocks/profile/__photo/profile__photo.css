@@ -1,6 +1,5 @@
 .profile__photo {
-  background-image: url("../../../images/profile_photo.jpg");
-  background-size: contain;
+  background: url("../../../images/profile_photo.jpg") center / cover;
   border-radius: 50%;
   margin-bottom: 26px;
   object-fit: cover;
