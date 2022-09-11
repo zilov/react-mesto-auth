@@ -1,4 +1,6 @@
-const authUrl = 'http://mestofront.nomoredomains.sbs/api'
+const { apiConfig } = require("./constants");
+
+const authUrl = apiConfig.url;
 
 function checkResponse(res, job) {
   if (res.ok) {
@@ -31,20 +33,10 @@ export const login = (email, password) => {
   ).then((response) => {return checkResponse(response, job)})
 }
 
-export const checkToken = () => {
-  const job = 'check JWT validity'
-  const jwt = localStorage.getItem('jwt')
+export const checkToken = (jwt) => {
+  console.log(`Trying to check JWT: ${jwt}`)
   if (jwt) {
-    return fetch(
-      `${authUrl}/users/me`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${jwt}`
-        }
-      }
-    ).then((response) => {return checkResponse(response, job)})
+    return true;
   } else {
     return Promise.reject();
   }

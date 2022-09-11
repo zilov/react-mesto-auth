@@ -18,7 +18,8 @@ import { checkToken } from '../utils/Auth';
 import PopupAuthInfo from './PopupAuthInfo';
 import iconError from '../images/popup_auth-info-error.svg';
 import iconSuccess from '../images/popup_auth-info-success.svg';
-import { login, register } from "../utils/Auth"
+import { login, register } from "../utils/Auth";
+import Cookies from 'js-cookie';
 
 function App() {
 
@@ -26,30 +27,39 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '');
+  const [userEmail, setUserEmail] = useState(Cookies.get('userEmail') || '');
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
-    checkToken().then(() => setLoggedIn(true))
-    .catch(() => setLoggedIn(false))
+    const jwt = Cookies.get('jwt')
+    if (jwt) {
+      console.log(`JWT found: ${jwt}, checking if valid`)
+      // trying to check token on backend => line 114
+      api.getProfileInfo()
+        .then(() => {setLoggedIn(true)})
+        .catch(() => {setLoggedIn(false)})
+    } else {
+      setLoggedIn(false);
+    }
   }, [])
 
   useEffect(() => {
     if (loggedIn) {
       history.push('/');
     } else {
-      history.push('/signup');
-      localStorage.removeItem('jwt');
+      history.push('/signin');
+      Cookies.remove('jwt');
+      Cookies.remove('userEmail');
     }
   }, [loggedIn]);
 
 
   const handleLoginError = () => {
     setLoginSuccess(false);
-    setIsRegisterPopupOpen(true)
+    setIsRegisterPopupOpen(true);
     setIsFormLoading(false);
   }
 
@@ -58,9 +68,10 @@ function App() {
     // если не успешно - открываем попап ошибки
     setIsFormLoading(true);
     login(email, password).then((res) => {
-      localStorage.setItem('userEmail', email)
+      Cookies.set('userEmail', email, {sameSite: false});
       setUserEmail(email);
       setLoggedIn(true);
+      Cookies.set('jwt', res.token, {sameSite: false});
     }).catch(() => handleLoginError())
     .finally(setIsFormLoading(false));
   }
@@ -76,7 +87,7 @@ function App() {
     setIsFormLoading(false);
     // открыть попап успешной регистрации
     setLoginSuccess(true);
-    setIsRegisterPopupOpen(true)
+    setIsRegisterPopupOpen(true);
   }
 
   const handleRegisterSubmit = (email, password) => {
@@ -108,11 +119,15 @@ function App() {
     if (loggedIn) {
       api.getProfileInfo().then((res) => {
         setCurrentUser(res);
-      }).catch((err) => {console.log(`Error in getting initial user data ${err}`)})
+      }).catch((err) => {
+        console.log(`Error in getting initial user data ${err}`);
+      })
   
       api.getCardsList().then((res) => {
         setCards(res.map(item => item))
-      }).catch((err) => {console.log(`Error in getting initial card list ${err}`)})
+      }).catch((err) => {
+        console.log(`Error in getting initial card list ${err}`)
+      })
     }
   }, [loggedIn]);
   
