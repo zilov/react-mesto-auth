@@ -36,7 +36,6 @@ function App() {
   useEffect(() => {
     const jwt = Cookies.get('jwt')
     if (jwt) {
-      console.log(`JWT found: ${jwt}, checking if valid`)
       // trying to check token on backend => line 114
       api.getProfileInfo()
         .then(() => {setLoggedIn(true)})
