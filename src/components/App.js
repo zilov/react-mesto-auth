@@ -51,8 +51,6 @@ function App() {
       history.push('/');
     } else {
       history.push('/signin');
-      Cookies.remove('jwt');
-      Cookies.remove('userEmail');
     }
   }, [loggedIn]);
 
@@ -67,13 +65,14 @@ function App() {
     // сравниваем данные с данными сервера, если успешно залогинились - обновляем токен
     // если не успешно - открываем попап ошибки
     setIsFormLoading(true);
-    login(email, password).then((res) => {
-      Cookies.set('userEmail', email, {sameSite: false});
-      setUserEmail(email);
-      setLoggedIn(true);
-      Cookies.set('jwt', res.token, {sameSite: false});
-    }).catch(() => handleLoginError())
-    .finally(setIsFormLoading(false));
+    login(email, password)
+      .then((res) => {
+        Cookies.set('userEmail', email, {sameSite: false});
+        setUserEmail(email);
+        setLoggedIn(true);
+      })
+      .catch(() => handleLoginError())
+      .finally(setIsFormLoading(false));
   }
 
   const handleRegisterError = () => {
@@ -94,7 +93,7 @@ function App() {
     // сравниваем данные с данными сервера
     setIsFormLoading(true);
     register(email, password).then((res) => {
-      if (res.data) {
+      if (res.status === 200) {
         handleRegisterSuccess(); 
       }
     })
@@ -106,6 +105,11 @@ function App() {
     history.push('/signin');
     closeAllPopups();
   } 
+
+  const handleLogout = () => {
+    Cookies.remove('jwt');
+    Cookies.remove('userEmail');
+  }
 
   // main functionality states and functions
   const [currentUser, setCurrentUser] = useState({});
@@ -207,6 +211,7 @@ function App() {
             logo={logo}
             loggedIn={loggedIn}
             setLoggedIn={setLoggedIn}
+            onLogout={handleLogout}
             email={userEmail}
           /> 
           <Switch>
@@ -233,7 +238,6 @@ function App() {
                 onEditAvatar={handleEditAvatarClick}
                 onAddPlace={handleEditPlaceClick}
                 onCardClick={handleCardClick}
-                onClose = {closeAllPopups}
                 popupOpenStates= {{
                   editProfile: isEditProfilePopupOpen,
                   editAvatar: isEditAvatarPopupOpen,

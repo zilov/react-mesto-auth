@@ -4,7 +4,7 @@ import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main({cards, onEditProfile, onEditAvatar, onAddPlace, 
-                onCardClick, onClose, handleCardLike, handleCardDelete}) {
+                onCardClick, handleCardLike, handleCardDelete}) {
 
   const currentUser = useContext(CurrentUserContext);
   

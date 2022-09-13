@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-function Header({logo, loggedIn, setLoggedIn, email}) {
+function Header({logo, loggedIn, setLoggedIn, onLogout, email}) {
   return (
     <header className="header">
       <img src={logo} alt="лого" className="header__logo" />
@@ -12,7 +12,10 @@ function Header({logo, loggedIn, setLoggedIn, email}) {
               exact to="/" 
               activeStyle={{color:'#A9A9A9'}}
               className={isActive => 'header__link' + (isActive ? ' header__link_active' : '')}
-              onClick={() => {setLoggedIn(false)}}
+              onClick={() => {
+                setLoggedIn(false);
+                onLogout();
+              }}
             >Выйти</NavLink>
           </>
         :
